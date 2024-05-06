@@ -1981,20 +1981,7 @@ ${text}`);
       let byteString = [...encoded].map((byte) => String.fromCharCode(byte)).join("");
       let base64 = btoa(byteString);
       let svgUrl = `data:image/svg+xml;base64,${base64}`;
-      switch (format) {
-        case "svg":
-          return svgUrl;
-        case "png":
-          let img = await waitForImageLoad(svgUrl);
-          let canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          canvas.getContext("2d").drawImage(img, 0, 0);
-          return new Promise((resolve) => {
-            canvas.toBlob((blob) => resolve(URL.createObjectURL(blob)), "image/png");
-          });
-          break;
-      }
+      return svgUrl;
     }
     download(href) {
       let link = document.createElement("a");
@@ -2003,13 +1990,6 @@ ${text}`);
       link.click();
     }
   };
-  async function waitForImageLoad(src) {
-    let img = new Image();
-    img.src = src;
-    return new Promise((resolve) => {
-      img.onload = () => resolve(img);
-    });
-  }
 
   // .js/ui/backend/image.js
   var ImageUI = class extends BackendUI {
@@ -3049,6 +3029,9 @@ ${text}`);
     children: false
   };
   var Item = class {
+    static fromJSON(data) {
+      return new this().fromJSON(data);
+    }
     constructor() {
       this._id = generateId();
       this._parent = null;
@@ -3094,9 +3077,6 @@ ${text}`);
         selectItem(this);
       });
       this.updateToggle();
-    }
-    static fromJSON(data) {
-      return new this().fromJSON(data);
     }
     get id() {
       return this._id;

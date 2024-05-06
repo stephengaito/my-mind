@@ -17,9 +17,9 @@ export default class ImageBackend extends Backend {
 		let base64 = btoa(byteString);
 		let svgUrl = `data:image/svg+xml;base64,${base64}`;
 
+    /*
 		switch (format) {
 			case "svg": return svgUrl;
-
 			case "png":
 				let img = await waitForImageLoad(svgUrl);
 				let canvas = document.createElement("canvas");
@@ -32,6 +32,8 @@ export default class ImageBackend extends Backend {
 				});
 			break;
 		}
+		*/
+		return svgUrl;
 	}
 
 	download(href: string) {
